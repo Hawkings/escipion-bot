@@ -1,0 +1,12 @@
+{
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "bin"
+  },
+  "include": [
+    "src/**/*",
+    "__tests__/**/*"
+  ]
+}
