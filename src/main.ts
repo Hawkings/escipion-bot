@@ -30,7 +30,7 @@ bot.onText(/^\/ranking/i, async msg => {
 		if (i < 3) {
 			position = ['🥇', '🥈', '🥉'][i];
 		}
-		output += `${position} ${await getUserName(group, user)} ${score}`;
+		output += `${position} ${await getUserName(group, user)} ${score}\n`;
 	}
 	bot.sendMessage(group, output);
 });
