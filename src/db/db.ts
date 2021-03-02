@@ -27,6 +27,14 @@ const poleTimes = new Map<number, PoleType[]>([
 		],
 	],
 	[
+		18,
+		[
+			PoleType.UNKNOWN, //
+			PoleType.UNKNOWN,
+			PoleType.UNKNOWN,
+		],
+	],
+	[
 		12,
 		[
 			PoleType.ANDALUSIAN_GOLD, //
@@ -46,6 +54,7 @@ const poleMessage = new Map<PoleType, string>([
 	[PoleType.ANDALUSIAN_GOLD, '¡$user ha conseguido la POLE ANDALUZA!'],
 	[PoleType.ANDALUSIAN_SILVER, '¡$user ha conseguido la plata andaluza!'],
 	[PoleType.ANDALUSIAN_BRONZE, '$user ha conseguido el bronce andaluz'],
+	[PoleType.UNKNOWN, '$user ha conseguido la Pole Secreta'],
 ]);
 
 export default class Database {
@@ -134,7 +143,7 @@ export default class Database {
         `);
 		this.db.exec(`
             INSERT OR IGNORE INTO scores (pole_type, score) VALUES
-            (${PoleType.UNKNOWN}, 0),
+            (${PoleType.UNKNOWN}, 3),
             (${PoleType.NORMAL_GOLD}, 5),
             (${PoleType.NORMAL_SILVER}, 2),
             (${PoleType.NORMAL_BRONZE}, 1),
