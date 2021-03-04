@@ -14,6 +14,7 @@ import {
 export interface RankingResult {
 	user: User;
 	score: number;
+	rank: number;
 }
 
 export enum SavePoleStatus {

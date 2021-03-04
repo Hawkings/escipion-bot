@@ -6,18 +6,17 @@ const POSITIONS = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣', '6️⃣', '7�
 
 function getPositionDisplay(position: number) {
 	if (position <= POSITIONS.length) {
-		return POSITIONS[position];
+		return POSITIONS[position - 1];
 	} else {
-		return `${position + 1}`;
+		return `${position}`;
 	}
 }
 
 export async function ranking(group: Group): Promise<void> {
 	const ranking = getRanking(group);
 	let output = '🏆 Ranking 🏆\n';
-	for (let i = 0; i < ranking.length; i++) {
-		const {user, score} = ranking[i];
-		const position = getPositionDisplay(i);
+	for (const {user, score, rank} of ranking) {
+		const position = getPositionDisplay(rank);
 		output += `${position} ${await getUserName(group, user)} ${score}\n`;
 	}
 	bot.sendMessage(group, output);
