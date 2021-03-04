@@ -1,14 +1,14 @@
 /** A Telegram user ID. */
 export type User = string & {user: never};
 
-export function toUser(userId: number) {
+export function toUser(userId: number): User {
 	return `${userId}` as User;
 }
 
 /** A Telegram group ID. */
 export type Group = string & {group: never};
 
-export function toGroup(groupId: number) {
+export function toGroup(groupId: number): Group {
 	return `${groupId}` as Group;
 }
 
@@ -24,3 +24,5 @@ export enum PoleType {
 	RUSSIAN_SILVER = 8,
 	RUSSIAN_BRONZE = 9,
 }
+
+export type ValidPoleType = Exclude<PoleType, PoleType.UNKNOWN>;
