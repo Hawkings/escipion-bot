@@ -2,7 +2,7 @@ import {getRanking} from '../db/db';
 import {bot, getUserName} from '../telegram';
 import {Group} from '../types';
 
-const POSITIONS = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣'];
+const POSITIONS = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
 function getPositionDisplay(position: number) {
 	if (position <= POSITIONS.length) {
