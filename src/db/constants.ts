@@ -4,7 +4,12 @@ export const DB_FILE_NAME = 'escipion.db';
 
 export const INSERT_POLE_QUERY = `INSERT INTO poles (user, type, group_id, timestamp) values (?, ?, ?, ?)`;
 export const RANKING_QUERY = `
-	SELECT user, SUM(counts.times*scores.score) as score, RANK() OVER (ORDER BY score DESC) as rank
+	SELECT
+		user,
+		SUM(counts.times*scores.score) as score,
+		RANK() OVER (
+			ORDER BY SUM(counts.times*scores.score) DESC
+		) as rank
 	FROM (
 		(
 			SELECT user, type, count(*) as times
