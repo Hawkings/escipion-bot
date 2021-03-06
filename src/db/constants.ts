@@ -50,7 +50,10 @@ export const INSERT_POLE_VALUES_QUERY = `
 	(${PoleType.ANDALUSIAN_BRONZE}, 1),
 	(${PoleType.RUSSIAN_GOLD}, 5),
 	(${PoleType.RUSSIAN_SILVER}, 2),
-	(${PoleType.RUSSIAN_BRONZE}, 1)
+	(${PoleType.RUSSIAN_BRONZE}, 1),
+	(${PoleType.SECRET_GOLD}, 5),
+	(${PoleType.SECRET_SILVER}, 2),
+	(${PoleType.SECRET_BRONZE}, 1)
 `;
 export const CREATE_POLES_QUERY = `
 	CREATE TABLE IF NOT EXISTS poles (

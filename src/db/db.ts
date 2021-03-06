@@ -1,4 +1,5 @@
 import sqlite from 'better-sqlite3';
+import {hash} from '../../secret';
 import {Group, PoleType, User, ValidPoleType} from '../types';
 import {
 	CREATE_POLES_QUERY,
@@ -41,18 +42,12 @@ const poleTimes: ReadonlyMap<number, ValidPoleType[]> = new Map([
 	[23, [PoleType.RUSSIAN_GOLD, PoleType.RUSSIAN_SILVER, PoleType.RUSSIAN_BRONZE]],
 	[12, [PoleType.ANDALUSIAN_GOLD, PoleType.ANDALUSIAN_SILVER, PoleType.ANDALUSIAN_BRONZE]],
 ]);
+const secretPoles = [PoleType.SECRET_GOLD, PoleType.SECRET_SILVER, PoleType.SECRET_BRONZE] as const;
 
-const db = (() => {
-	try {
-		return sqlite(DB_FILE_NAME, {fileMustExist: true});
-	} catch {
-		const db = sqlite(DB_FILE_NAME);
-		db.exec(CREATE_SCORES_QUERY);
-		db.exec(INSERT_POLE_VALUES_QUERY);
-		db.exec(CREATE_POLES_QUERY);
-		return db;
-	}
-})();
+const db = sqlite(DB_FILE_NAME);
+db.exec(CREATE_SCORES_QUERY);
+db.exec(INSERT_POLE_VALUES_QUERY);
+db.exec(CREATE_POLES_QUERY);
 
 const insertStmt = db.prepare(INSERT_POLE_QUERY);
 const rankingStmt = db.prepare(RANKING_QUERY);
@@ -62,23 +57,25 @@ const whichPoleStmt = db.prepare(WHICH_POLE_QUERY);
 export function savePole(user: User, group: Group): SavePoleResult {
 	const now = new Date();
 	const hour = now.getHours();
-	if (!poleTimes.has(hour)) {
+	const dayStart = truncateToDay(now);
+	const secretHour = toRandomHour(hash(dayStart.getTime()));
+	const isSecretPole = secretHour === hour;
+
+	if (!poleTimes.has(hour) && !isSecretPole) {
 		return {status: SavePoleStatus.WRONG_TIME};
 	}
-	// unix time for the beginning of the current hour
-	const hourStart = new Date(now);
-	hourStart.setMinutes(0);
-	hourStart.setSeconds(0);
-	hourStart.setMilliseconds(0);
+
+	const hourStart = truncateToHour(now);
 	const {n: repeated} = hasPoledStmt.get(user, group, toDbTime(hourStart));
 	if (repeated > 0) {
 		return {status: SavePoleStatus.REPEATED};
 	}
+
 	const {n: polesBefore} = whichPoleStmt.get(group, toDbTime(hourStart));
 	if (polesBefore >= 3) {
 		return {status: SavePoleStatus.NO_POLES_LEFT};
 	}
-	const poleType = poleTimes.get(hour)![polesBefore];
+	const poleType = poleTimes.get(hour)?.[polesBefore] ?? secretPoles[polesBefore];
 	const result = insertStmt.run(user, poleType, group, toDbTime(now));
 	const ok = result.changes === 1;
 	return ok ? {status: SavePoleStatus.SUCCESS, poleType} : {status: SavePoleStatus.ERROR};
@@ -86,6 +83,41 @@ export function savePole(user: User, group: Group): SavePoleResult {
 
 function toDbTime(date: Date) {
 	return Math.floor(date.getTime() / 1000);
+}
+
+/**
+ * Receives a random arbitrary number and returns a random hour, excluding the hours that already
+ * have a pole.
+ */
+function toRandomHour(random: number) {
+	const usedHours = Array.from(poleTimes.keys()).sort((a, b) => a - b);
+	const mod = 24 - usedHours.length;
+	let hour = ((random % mod) + mod) % mod;
+	for (const usedHour of usedHours) {
+		if (usedHour <= hour) {
+			hour++;
+		} else {
+			break;
+		}
+	}
+	return hour;
+}
+
+function truncateToHour(date: Date) {
+	const truncated = new Date(date);
+	truncated.setMilliseconds(0);
+	truncated.setSeconds(0);
+	truncated.setMinutes(0);
+	return truncated;
+}
+
+function truncateToDay(date: Date) {
+	const truncated = new Date(date);
+	truncated.setMilliseconds(0);
+	truncated.setSeconds(0);
+	truncated.setMinutes(0);
+	truncated.setHours(0);
+	return truncated;
 }
 
 export function getRanking(group: Group): RankingResult[] {

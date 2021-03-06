@@ -12,6 +12,9 @@ const successfulPoleMessage: Record<ValidPoleType, string> = {
 	[PoleType.ANDALUSIAN_GOLD]: '¡$user ha conseguido la POLE ANDALUZA!',
 	[PoleType.ANDALUSIAN_SILVER]: '¡$user ha conseguido la plata andaluza!',
 	[PoleType.ANDALUSIAN_BRONZE]: '$user ha conseguido el bronce andaluz',
+	[PoleType.SECRET_GOLD]: '¡$user ha conseguido la POLE SECRETA!',
+	[PoleType.SECRET_SILVER]: '¡$user ha conseguido la plata secreta!',
+	[PoleType.SECRET_BRONZE]: '$user ha conseguido el bronce secreto',
 };
 
 const failedPoleMessage: Record<Exclude<SavePoleStatus, SavePoleStatus.SUCCESS>, string> = {

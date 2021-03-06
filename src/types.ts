@@ -23,6 +23,9 @@ export enum PoleType {
 	RUSSIAN_GOLD = 7,
 	RUSSIAN_SILVER = 8,
 	RUSSIAN_BRONZE = 9,
+	SECRET_GOLD = 10,
+	SECRET_SILVER = 11,
+	SECRET_BRONZE = 12,
 }
 
 export type ValidPoleType = Exclude<PoleType, PoleType.UNKNOWN>;
