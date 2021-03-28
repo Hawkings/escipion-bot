@@ -1,6 +1,7 @@
 import {getRanking} from '../db/db';
 import {bot, getUserName} from '../telegram';
 import {Group} from '../types';
+import {getSeasonStart} from '../util';
 
 const POSITIONS = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣', '🔟'];
 
@@ -13,7 +14,8 @@ function getPositionDisplay(position: number) {
 }
 
 export async function ranking(group: Group): Promise<void> {
-	const ranking = getRanking(group);
+	const seasonStart = getSeasonStart(new Date());
+	const ranking = getRanking(group, seasonStart);
 	let output = '🏆 Ranking 🏆\n';
 	for (const {user, score, rank} of ranking) {
 		const position = getPositionDisplay(rank);

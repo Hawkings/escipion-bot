@@ -120,6 +120,6 @@ function truncateToDay(date: Date) {
 	return truncated;
 }
 
-export function getRanking(group: Group): RankingResult[] {
-	return rankingStmt.all(group);
+export function getRanking(group: Group, seasonStart: Date): RankingResult[] {
+	return rankingStmt.all(group, Math.floor(seasonStart.getTime() / 1000));
 }

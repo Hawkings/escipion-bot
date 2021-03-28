@@ -14,7 +14,7 @@ export const RANKING_QUERY = `
 		(
 			SELECT user, type, count(*) as times
 			FROM poles
-			WHERE group_id = ?
+			WHERE group_id = ? AND timestamp >= ?
 			GROUP BY user,  type
 		) counts
 		LEFT JOIN scores
