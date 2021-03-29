@@ -19,7 +19,7 @@ function addDaysToDate(date: Date, days: number) {
  * Returns the Date of the start of the season that `date` belongs to.
  */
 export function getSeasonStart(date: Date): Date {
-	const deltaDays = dateDiffInDays(date, REFERENCE_DATE);
+	const deltaDays = dateDiffInDays(REFERENCE_DATE, date);
 	const deltaSeasons = Math.floor(deltaDays / 14);
 	return addDaysToDate(REFERENCE_DATE, Math.floor(14 * deltaSeasons));
 }
