@@ -28,4 +28,36 @@ export enum PoleType {
 	SECRET_BRONZE = 12,
 }
 
+export const POLE_TYPES_COUNT = Object.keys(PoleType).length / 2 - 1;
+export const GOLD_POLES = new Set([
+	PoleType.NORMAL_GOLD,
+	PoleType.ANDALUSIAN_GOLD,
+	PoleType.RUSSIAN_GOLD,
+	PoleType.SECRET_GOLD,
+]);
+export const SILVER_POLES = new Set([
+	PoleType.NORMAL_SILVER,
+	PoleType.ANDALUSIAN_SILVER,
+	PoleType.RUSSIAN_SILVER,
+	PoleType.SECRET_SILVER,
+]);
+export const BRONZE_POLES = new Set([
+	PoleType.NORMAL_BRONZE,
+	PoleType.ANDALUSIAN_BRONZE,
+	PoleType.RUSSIAN_BRONZE,
+	PoleType.SECRET_BRONZE,
+]);
+
 export type ValidPoleType = Exclude<PoleType, PoleType.UNKNOWN>;
+
+export function isGold(poleType: PoleType) {
+	return GOLD_POLES.has(poleType);
+}
+
+export function isSilver(poleType: PoleType) {
+	return SILVER_POLES.has(poleType);
+}
+
+export function isBronze(poleType: PoleType) {
+	return BRONZE_POLES.has(poleType);
+}

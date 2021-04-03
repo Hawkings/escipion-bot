@@ -1,6 +1,7 @@
-import {savePole, SavePoleStatus} from '../db/db';
+import {maybeSavePole, SavePoleStatus} from '../db/db';
 import {Group, PoleType, User, ValidPoleType} from '../types';
 import {bot, getUserName} from '../telegram';
+import {onPole} from '../achievements/achievements';
 
 const successfulPoleMessage: Record<ValidPoleType, string> = {
 	[PoleType.NORMAL_GOLD]: '¡$user ha conseguido la POLE!',
@@ -25,7 +26,9 @@ const failedPoleMessage: Record<Exclude<SavePoleStatus, SavePoleStatus.SUCCESS>,
 };
 
 export async function pole(user: User, group: Group): Promise<void> {
-	const result = savePole(user, group);
+	const now = new Date();
+	const result = maybeSavePole(user, group, now);
+	setImmediate(onPole, user, group, result, now);
 	let message: string;
 	if (result.status === SavePoleStatus.SUCCESS) {
 		message = successfulPoleMessage[result.poleType];
