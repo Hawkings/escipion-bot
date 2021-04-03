@@ -6,7 +6,7 @@ import {bot} from '../src/telegram';
 import {toGroup, toUser} from '../src/types';
 
 const mockGetRanking = getRanking as jest.MockedFunction<typeof getRanking>;
-const mockBot = bot as jest.Mocked<typeof bot>;
+const mockBot = bot() as jest.Mocked<ReturnType<typeof bot>>;
 
 /** @returns array with the numbers from 0 to n-1 */
 function seq(n: number) {

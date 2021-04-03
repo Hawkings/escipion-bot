@@ -33,3 +33,6 @@ secret.ts
 
 # Database
 escipion.db
+
+# Next.js
+.next

@@ -168,3 +168,42 @@ export const GET_USER_POLE_TIMES_QUERY = `
 	WHERE user = ? AND group_id = ?
 	GROUP BY minutes
 `;
+
+export const CREATE_WEB_TOKENS_QUERY = `
+	CREATE TABLE IF NOT EXISTS web_tokens (
+		token VARCHAR(64) PRIMARY KEY,
+		user VARCHAR(30) NOT NULL,
+		group_id VARCHAR(30) NOT NULL
+	)
+`;
+
+export type GetTokenInfoParams = [string];
+export type GetTokenInfoResult =
+	| undefined
+	| {
+			user: User;
+			group: Group;
+	  };
+export const GET_TOKEN_INFO_QUERY = `
+	SELECT user, group_id as 'group'
+	FROM web_tokens
+	WHERE token = ?
+`;
+
+export type GetTokenParams = [User, Group];
+export type GetTokenResult =
+	| undefined
+	| {
+			token: string;
+	  };
+export const GET_TOKEN_QUERY = `
+	SELECT token
+	FROM web_tokens
+	WHERE user = ? AND group_id = ?
+`;
+
+export type CreateTokenParams = [string, User, Group];
+export const CREATE_TOKEN_QUERY = `
+	INSERT INTO web_tokens (token, user, group_id)
+	VALUES (?, ?, ?)
+`;

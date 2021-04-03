@@ -1,13 +1,14 @@
-import {listAchievements} from './achievements/achievements';
+import {listAchievements, listUserAchievements} from './achievements/achievements';
 import config from './config';
 import {pole} from './pole/pole';
 import {ranking} from './ranking/ranking';
+import {startNextServer} from './server';
 import {bot} from './telegram';
 import {toGroup, toUser} from './types';
 
 console.log(config.port);
 
-bot.onText(/^(?:(?:sub)?pole|plata|bronce)/i, msg => {
+bot().onText(/^(?:(?:sub)?pole|plata|bronce)/i, msg => {
 	const userId = msg.from?.id;
 	if (!userId) return;
 	const user = toUser(userId);
@@ -15,12 +16,22 @@ bot.onText(/^(?:(?:sub)?pole|plata|bronce)/i, msg => {
 	pole(user, group);
 });
 
-bot.onText(/^\/ranking/i, msg => {
+bot().onText(/^\/ranking/i, msg => {
 	const group = toGroup(msg.chat.id);
 	ranking(group);
 });
 
-bot.onText(/^\/logros/i, msg => {
+bot().onText(/^\/logros/i, msg => {
 	const group = toGroup(msg.chat.id);
 	listAchievements(group);
 });
+
+bot().onText(/^\/mislogros/i, msg => {
+	const group = toGroup(msg.chat.id);
+	const userId = msg.from?.id;
+	if (!userId) return;
+	const user = toUser(userId);
+	listUserAchievements(user, group);
+});
+
+startNextServer();

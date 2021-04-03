@@ -36,5 +36,5 @@ export async function pole(user: User, group: Group): Promise<void> {
 		message = failedPoleMessage[result.status];
 	}
 	message = message.replace('$user', await getUserName(group, user));
-	bot.sendMessage(group, message);
+	bot().sendMessage(group, message);
 }

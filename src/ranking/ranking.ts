@@ -21,5 +21,5 @@ export async function ranking(group: Group): Promise<void> {
 		const position = getPositionDisplay(rank);
 		output += `${position} ${await getUserName(group, user)} ${score}\n`;
 	}
-	bot.sendMessage(group, output);
+	bot().sendMessage(group, output);
 }

@@ -1,4 +1,5 @@
 import {
+	generateToken,
 	getGroupAchievements,
 	getUserAchievements,
 	getUserPoles,
@@ -29,9 +30,9 @@ export interface Achievement {
 	onPole?(params: OnPoleParams): boolean;
 }
 
-const allAchievements = [...NORMAL_ACHIEVEMENTS];
-const achievements = new Map(allAchievements.map(achievement => [achievement.id, achievement]));
-if (allAchievements.length !== achievements.size) {
+export const ALL_ACHIEVEMENTS = [...NORMAL_ACHIEVEMENTS];
+const achievements = new Map(ALL_ACHIEVEMENTS.map(achievement => [achievement.id, achievement]));
+if (ALL_ACHIEVEMENTS.length !== achievements.size) {
 	console.error('Error: duplicate achievement ID.');
 	process.exit(1);
 }
@@ -61,7 +62,7 @@ export async function onPole(user: User, group: Group, savePoleResult: SavePoleR
 		for (const {name, emoji} of obtainedAchievements) {
 			message += `¡${await getUserName(group, user)} ha conseguido el logro ${name} ${emoji}!\n`;
 		}
-		bot.sendMessage(group, message);
+		bot().sendMessage(group, message);
 	}
 }
 
@@ -82,6 +83,17 @@ export async function listAchievements(group: Group) {
 		message += `${await getUserName(group, user)}: ${emojis}\n`;
 	}
 	if (message) {
-		bot.sendMessage(group, message);
+		bot().sendMessage(group, message);
 	}
+}
+
+export async function listUserAchievements(user: User, group: Group) {
+	const token = await generateToken(user, group);
+	bot().sendMessage(
+		group,
+		`<a href="http://127.0.0.1:3000/${token}">http://localhost:3000/${token}</a>`,
+		{
+			parse_mode: 'HTML',
+		},
+	);
 }

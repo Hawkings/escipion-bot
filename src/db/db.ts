@@ -2,13 +2,21 @@ import sqlite from 'better-sqlite3';
 import {hash} from '../../secret';
 import {AchievementId} from '../achievements/achievements';
 import {Group, PoleType, User, ValidPoleType} from '../types';
+import {randomBytes} from 'crypto';
 import {
+	CreateTokenParams,
 	CREATE_ACHIEVEMENTS_QUERY,
 	CREATE_POLES_QUERY,
 	CREATE_SCORES_QUERY,
+	CREATE_TOKEN_QUERY,
+	CREATE_WEB_TOKENS_QUERY,
 	DB_FILE_NAME,
 	GetGroupAchievementsParams,
 	GetGroupAchievementsResult,
+	GetTokenInfoParams,
+	GetTokenInfoResult,
+	GetTokenParams,
+	GetTokenResult,
 	GetUserAchievementsParams,
 	GetUserAchievementsResult,
 	GetUserPolesParams,
@@ -16,6 +24,8 @@ import {
 	GetUserPoleTimesParams,
 	GetUserPoleTimesResult,
 	GET_GROUP_ACHIEVEMENTS_QUERY,
+	GET_TOKEN_INFO_QUERY,
+	GET_TOKEN_QUERY,
 	GET_USER_ACHIEVEMENTS_QUERY,
 	GET_USER_POLES_QUERY,
 	GET_USER_POLE_TIMES_QUERY,
@@ -69,6 +79,7 @@ db.exec(CREATE_SCORES_QUERY);
 db.exec(INSERT_POLE_VALUES_QUERY);
 db.exec(CREATE_POLES_QUERY);
 db.exec(CREATE_ACHIEVEMENTS_QUERY);
+db.exec(CREATE_WEB_TOKENS_QUERY);
 
 const insertStmt = db.prepare<InsertPoleParams, void>(INSERT_POLE_QUERY);
 const rankingStmt = db.prepare<RankingParams, RankingResult>(RANKING_QUERY);
@@ -88,6 +99,9 @@ const getUserPolesStmt = db.prepare<GetUserPolesParams, GetUserPolesResult>(GET_
 const getUserPoleTimesStmt = db.prepare<GetUserPoleTimesParams, GetUserPoleTimesResult>(
 	GET_USER_POLE_TIMES_QUERY,
 );
+const getTokenInfoStmt = db.prepare<GetTokenInfoParams, GetTokenInfoResult>(GET_TOKEN_INFO_QUERY);
+const createTokenStmt = db.prepare<CreateTokenParams, void>(CREATE_TOKEN_QUERY);
+const getTokenByUserStmt = db.prepare<GetTokenParams, GetTokenResult>(GET_TOKEN_QUERY);
 
 export function maybeSavePole(user: User, group: Group, time: Date): SavePoleResult {
 	const now = time;
@@ -207,4 +221,23 @@ export function getUserPolesWithTimes(user: User, group: Group) {
 			),
 		]),
 	);
+}
+
+export function getTokenInfo(token: string) {
+	return getTokenInfoStmt.get(token);
+}
+
+export async function generateToken(user: User, group: Group): Promise<string> {
+	const savedToken = getTokenByUserStmt.get(user, group);
+	if (savedToken) {
+		return savedToken.token;
+	}
+	return new Promise((resolve, reject) => {
+		randomBytes(16, (err, buf) => {
+			if (err) return reject(err);
+			const token = buf.toString('base64').replace(/\//g, '_').replace(/\+/g, '-').substr(0, 64);
+			createTokenStmt.run(token, user, group);
+			resolve(token);
+		});
+	});
 }
