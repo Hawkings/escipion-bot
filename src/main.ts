@@ -1,3 +1,4 @@
+import {listAchievements} from './achievements/achievements';
 import config from './config';
 import {pole} from './pole/pole';
 import {ranking} from './ranking/ranking';
@@ -17,4 +18,9 @@ bot.onText(/^(?:(?:sub)?pole|plata|bronce)/i, msg => {
 bot.onText(/^\/ranking/i, msg => {
 	const group = toGroup(msg.chat.id);
 	ranking(group);
+});
+
+bot.onText(/^\/logros/i, msg => {
+	const group = toGroup(msg.chat.id);
+	listAchievements(group);
 });
