@@ -1,6 +1,6 @@
 import {Achievement, AchievementId, OnPoleParams} from './achievements';
 import {GOLD_POLES, PoleType, POLE_TYPES_COUNT} from '../types';
-import {countGoldPoles} from './util';
+import {countBronzePoles, countGoldPoles, countSilverPoles} from './util';
 import {SavePoleStatus} from '../db/db';
 
 function secretPoleCounter(amount: number) {
@@ -9,6 +9,18 @@ function secretPoleCounter(amount: number) {
 
 function goldPoleCounter(amount: number) {
 	return ({poles}: OnPoleParams) => countGoldPoles(poles) >= amount;
+}
+
+function silverPoleCounter(amount: number) {
+	return ({poles}: OnPoleParams) => countSilverPoles(poles) >= amount;
+}
+
+function bronzePoleCounter(amount: number) {
+	return ({poles}: OnPoleParams) => countBronzePoles(poles) >= amount;
+}
+
+function scoreCounter(amount: number) {
+	return ({totalScore}: OnPoleParams) => totalScore >= amount;
 }
 
 const nonSecretGolds = new Set(
@@ -133,7 +145,7 @@ export const NORMAL_ACHIEVEMENTS: Achievement[] = [
 		id: 14 as AchievementId,
 		name: 'Último segundo',
 		emoji: '🎯',
-		description: 'Consigue una pole de cualquier tipo a cualquier hora y 59 minutos',
+		description: 'Consigue una pole de cualquier tipo a cualquier hora y 59 minutos.',
 		onPole({lastPoleSaveResult, lastPoleTime}) {
 			return (
 				lastPoleSaveResult.status === SavePoleStatus.SUCCESS &&
@@ -141,5 +153,103 @@ export const NORMAL_ACHIEVEMENTS: Achievement[] = [
 				lastPoleTime.getMinutes() >= 59
 			);
 		},
+	},
+	{
+		id: 15 as AchievementId,
+		name: 'Segundón',
+		emoji: '🐟',
+		description: 'Consigue 50 platas de cualquier tipo.',
+		onPole: silverPoleCounter(50),
+	},
+	{
+		id: 16 as AchievementId,
+		name: 'Segundón empedernido',
+		emoji: '🐠',
+		description: 'Consigue 100 platas de cualquier tipo.',
+		onPole: silverPoleCounter(100),
+	},
+	{
+		id: 17 as AchievementId,
+		name: 'Segundón profesional',
+		emoji: '🐡',
+		description: 'Consigue 250 platas de cualquier tipo.',
+		onPole: silverPoleCounter(250),
+	},
+	{
+		id: 18 as AchievementId,
+		name: 'Segundón experto',
+		emoji: '🐬',
+		description: 'Consigue 500 platas de cualquier tipo.',
+		onPole: silverPoleCounter(500),
+	},
+	{
+		id: 19 as AchievementId,
+		name: 'Medallista de plata',
+		emoji: '🐋',
+		description: 'Consigue 1000 platas de cualquier tipo.',
+		onPole: silverPoleCounter(1000),
+	},
+	{
+		id: 20 as AchievementId,
+		name: 'It’s something',
+		emoji: '🐜',
+		description: 'Consigue 50 bronces de cualquier tipo.',
+		onPole: bronzePoleCounter(50),
+	},
+	{
+		id: 21 as AchievementId,
+		name: 'La edad del bronce',
+		emoji: '🐛',
+		description: 'Consigue 100 bronces de cualquier tipo.',
+		onPole: bronzePoleCounter(100),
+	},
+	{
+		id: 22 as AchievementId,
+		name: 'Segundón profesional',
+		emoji: '🐌',
+		description: 'Consigue 250 bronces de cualquier tipo.',
+		onPole: bronzePoleCounter(250),
+	},
+	{
+		id: 23 as AchievementId,
+		name: 'Coleccionista de céntimos',
+		emoji: '🕷',
+		description: 'Consigue 500 bronces de cualquier tipo.',
+		onPole: bronzePoleCounter(500),
+	},
+	{
+		id: 24 as AchievementId,
+		name: 'Medallista de bronce',
+		emoji: '🦂',
+		description: 'Consigue 1000 bronces de cualquier tipo.',
+		onPole: bronzePoleCounter(1000),
+	},
+	{
+		id: 25 as AchievementId,
+		name: 'Jugador respetable',
+		emoji: '🐯',
+		description: 'Consigue 100 puntos en total',
+		onPole: scoreCounter(100),
+	},
+	{
+		id: 26 as AchievementId,
+		name: 'Jugador dedicado',
+		emoji: '🦁',
+		description: 'Consigue 250 puntos en total',
+		onPole: scoreCounter(250),
+	},
+	{
+		id: 27 as AchievementId,
+		name: 'Jugador profesional',
+		emoji: '🦖',
+		description: 'Consigue 500 puntos en total',
+		onPole: scoreCounter(500),
+	},
+	{
+		id: 28 as AchievementId,
+		name: 'Jugador profesional',
+		emoji: '🐲',
+		description: 'Consigue 1000 puntos en total',
+		onPole: scoreCounter(1000),
 	},
 ];

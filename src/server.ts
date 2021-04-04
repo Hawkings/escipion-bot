@@ -1,5 +1,6 @@
 import next from 'next';
 import {createServer, ServerOptions} from 'https';
+import {createServer as insecureCreateServer} from 'http';
 import {parse} from 'url';
 import {TLS_CERT_PATH, TLS_KEY_PATH, URL_BASE, WEB_PORT} from '../secret';
 import fs from 'fs';
@@ -18,7 +19,8 @@ export async function startNextServer() {
 			: {};
 
 	await app.prepare();
-	createServer(options, (req, res) => {
+	const createServerFn = 'cert' in options ? createServer : insecureCreateServer;
+	createServerFn(options, (req, res) => {
 		const parsedUrl = parse(req.url!, true);
 
 		handle(req, res, parsedUrl);

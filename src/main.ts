@@ -27,6 +27,7 @@ bot().onText(/^\/logros/i, msg => {
 });
 
 bot().onText(/^\/mislogros/i, msg => {
+	msg.entities?.filter(entity => entity.type === 'mention' || entity.type === 'text_mention');
 	const group = toGroup(msg.chat.id);
 	const userId = msg.from?.id;
 	if (!userId) return;

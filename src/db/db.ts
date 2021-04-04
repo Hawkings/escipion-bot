@@ -23,12 +23,15 @@ import {
 	GetUserPolesResult,
 	GetUserPoleTimesParams,
 	GetUserPoleTimesResult,
+	GetUserScoreParams,
+	GetUserScoreResult,
 	GET_GROUP_ACHIEVEMENTS_QUERY,
 	GET_TOKEN_INFO_QUERY,
 	GET_TOKEN_QUERY,
 	GET_USER_ACHIEVEMENTS_QUERY,
 	GET_USER_POLES_QUERY,
 	GET_USER_POLE_TIMES_QUERY,
+	GET_USER_SCORE_QUERY,
 	HasPoledParams,
 	HasPoledResult,
 	HAS_POLED_QUERY,
@@ -102,6 +105,7 @@ const getUserPoleTimesStmt = db.prepare<GetUserPoleTimesParams, GetUserPoleTimes
 const getTokenInfoStmt = db.prepare<GetTokenInfoParams, GetTokenInfoResult>(GET_TOKEN_INFO_QUERY);
 const createTokenStmt = db.prepare<CreateTokenParams, void>(CREATE_TOKEN_QUERY);
 const getTokenByUserStmt = db.prepare<GetTokenParams, GetTokenResult>(GET_TOKEN_QUERY);
+const getUserScoreStmt = db.prepare<GetUserScoreParams, GetUserScoreResult>(GET_USER_SCORE_QUERY);
 
 export function maybeSavePole(user: User, group: Group, time: Date): SavePoleResult {
 	const now = time;
@@ -245,4 +249,8 @@ export async function generateToken(user: User, group: Group): Promise<string> {
 			resolve(token);
 		});
 	});
+}
+
+export function getUserScore(user: User, group: Group, timestamp = 0) {
+	return getUserScoreStmt.get(group, timestamp, user);
 }

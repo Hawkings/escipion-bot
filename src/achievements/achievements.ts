@@ -4,6 +4,7 @@ import {
 	getGroupAchievements,
 	getUserAchievements,
 	getUserPoles,
+	getUserScore,
 	saveAchievement,
 	SavePoleResult,
 } from '../db/db';
@@ -17,6 +18,7 @@ export interface OnPoleParams {
 	poles: Map<PoleType, number>;
 	lastPoleSaveResult: SavePoleResult;
 	lastPoleTime: Date;
+	totalScore: number;
 }
 
 export interface Achievement {
@@ -43,6 +45,7 @@ export async function onPole(user: User, group: Group, savePoleResult: SavePoleR
 		getUserAchievements(user, group).map(({achievementId}) => achievementId),
 	);
 	const userPoles = getUserPoles(user, group);
+	const userScore = getUserScore(user, group);
 	const obtainedAchievements: Achievement[] = [];
 	for (const achievement of achievements.values()) {
 		if (userAchievements.has(achievement.id)) {
@@ -52,6 +55,7 @@ export async function onPole(user: User, group: Group, savePoleResult: SavePoleR
 			poles: userPoles,
 			lastPoleSaveResult: savePoleResult,
 			lastPoleTime: time,
+			totalScore: userScore.score,
 		});
 		if (obtained) {
 			saveAchievement(user, group, achievement.id);

@@ -207,3 +207,32 @@ export const CREATE_TOKEN_QUERY = `
 	INSERT INTO web_tokens (token, user, group_id)
 	VALUES (?, ?, ?)
 `;
+
+export type GetUserScoreParams = [Group, number, User];
+export interface GetUserScoreResult {
+	score: number;
+	rank: number;
+}
+export const GET_USER_SCORE_QUERY = `
+	SELECT score, rank
+	FROM (
+		SELECT
+		user,
+		SUM(counts.times*scores.score) as score,
+		RANK() OVER (
+			ORDER BY SUM(counts.times*scores.score) DESC
+		) as rank
+		FROM (
+		(
+			SELECT user, type, count(*) as times
+			FROM poles
+			WHERE group_id = ? AND timestamp >= ?
+			GROUP BY user,  type
+		) counts
+		LEFT JOIN scores
+		ON counts.type = scores.pole_type
+		)
+		GROUP BY user
+	)
+	WHERE user = ?
+`;
