@@ -91,7 +91,7 @@ export async function listAchievements(group: Group) {
 export async function listUserAchievements(user: User, group: Group) {
 	const token = await generateToken(user, group);
 	const url = `${URL_BASE}/${token}`;
-	bot().sendMessage(group, `<a href="${url}">${url}</a>`, {
+	bot().sendMessage(group, `<a href="${url}">Logros de ${await getUserName(group, user)}</a>`, {
 		parse_mode: 'HTML',
 	});
 }
