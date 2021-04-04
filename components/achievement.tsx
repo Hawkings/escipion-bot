@@ -6,7 +6,7 @@ export default function Achievement({achievement}: {achievement: AchievementProp
 	const notObtainedClasses = obtainedDate ? '' : 'blocked';
 	return (
 		<div
-			className={`rounded-2xl p-2 flex items-center m-7 mt-0 first:mt-7 border-2 border-solid border-mine-primary relative overflow-hidden bg-mine-dark ${notObtainedClasses}`}
+			className={`rounded-2xl md:max-w-prose w-full p-2 pr-4 flex items-center mt-7 md:mx-auto first:mt-0 border-2 border-solid border-mine-primary relative overflow-hidden bg-mine-dark ${notObtainedClasses}`}
 		>
 			<Emoji>{emoji}</Emoji>
 			<Text name={name} description={description} />
