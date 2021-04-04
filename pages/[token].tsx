@@ -66,7 +66,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
 		} else if (b.obtainedDate) {
 			return 1;
 		} else {
-			return a.name.localeCompare(b.name);
+			return a.id - b.id;
 		}
 	});
 	return {
