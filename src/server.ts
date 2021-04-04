@@ -9,10 +9,13 @@ export async function startNextServer() {
 	const app = next({dev});
 	const handle = app.getRequestHandler();
 
-	const options: ServerOptions = {
-		key: fs.readFileSync(TLS_KEY_PATH),
-		cert: fs.readFileSync(TLS_CERT_PATH),
-	};
+	const options: ServerOptions =
+		TLS_KEY_PATH && TLS_CERT_PATH
+			? {
+					key: fs.readFileSync(TLS_KEY_PATH),
+					cert: fs.readFileSync(TLS_CERT_PATH),
+			  }
+			: {};
 
 	await app.prepare();
 	createServer(options, (req, res) => {
@@ -20,6 +23,6 @@ export async function startNextServer() {
 
 		handle(req, res, parsedUrl);
 	}).listen(WEB_PORT, () => {
-		console.log(`> Ready on ${URL_BASE} on port ${WEB_PORT}`);
+		console.log(`> Ready on ${URL_BASE} on port ${WEB_PORT} with dev=${dev}`);
 	});
 }
