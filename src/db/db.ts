@@ -235,7 +235,12 @@ export async function generateToken(user: User, group: Group): Promise<string> {
 	return new Promise((resolve, reject) => {
 		randomBytes(16, (err, buf) => {
 			if (err) return reject(err);
-			const token = buf.toString('base64').replace(/\//g, '_').replace(/\+/g, '-').substr(0, 64);
+			const token = buf
+				.toString('base64')
+				.replace(/\//g, '_')
+				.replace(/\+/g, '-')
+				.replace(/=/g, '')
+				.substr(0, 64);
 			createTokenStmt.run(token, user, group);
 			resolve(token);
 		});
