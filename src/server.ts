@@ -14,6 +14,6 @@ export async function startNextServer() {
 
 		handle(req, res, parsedUrl);
 	}).listen(WEB_PORT, () => {
-		console.log(`> Ready on ${URL_BASE}`);
+		console.log(`> Ready on ${URL_BASE} on port ${WEB_PORT}`);
 	});
 }
