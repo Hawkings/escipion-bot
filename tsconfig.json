@@ -15,6 +15,7 @@
     "src/**/*",
     "types/**/*",
     "pages/**/*",
+    "components/**/*",
     "__tests__/**/*"
   ],
   "exclude": [

@@ -1,39 +1,38 @@
 import 'react';
-import {ALL_ACHIEVEMENTS} from '../src/achievements/achievements';
+import {AchievementId, ALL_ACHIEVEMENTS} from '../src/achievements/achievements';
 import {GetServerSideProps} from 'next';
 import {getTokenInfo, getUserAchievements} from '../src/db/db';
+import Main from '../components/main';
+import Achievement from '../components/achievement';
 
 export default function Post(props: Props) {
 	if (!props.valid) {
 		return <h1>404 not found</h1>;
 	}
 
-	return props.achievements.map(({name, emoji, description, obtainedDate}) => (
-		<div className="bg-blue-700 text-blue-100">
-			{emoji} {name}
-			<br />
-			{description}
-			{obtainedDate ? (
-				<>
-					<br /> Obtenido el {new Date(obtainedDate).toString()}
-				</>
-			) : null}
-		</div>
-	));
+	return (
+		<Main>
+			{props.achievements.map(achievement => (
+				<Achievement achievement={achievement} key={achievement.id} />
+			))}
+		</Main>
+	);
 }
 
+export interface AchievementProp {
+	id: AchievementId;
+	name: string;
+	emoji: string;
+	description: string;
+	obtainedDate: number | null;
+}
 type Props =
 	| {
 			valid: false;
 	  }
 	| {
 			valid: true;
-			achievements: Array<{
-				name: string;
-				emoji: string;
-				description: string;
-				obtainedDate: number | null;
-			}>;
+			achievements: Array<AchievementProp>;
 	  };
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
 	const token = context.query.token as string;
@@ -52,6 +51,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
 		]),
 	);
 	const achievements = ALL_ACHIEVEMENTS.map(achievement => ({
+		id: achievement.id,
 		name: achievement.name,
 		emoji: achievement.emoji,
 		description: achievement.description,

@@ -1,3 +1,4 @@
+import {URL_BASE} from '../../secret';
 import {
 	generateToken,
 	getGroupAchievements,
@@ -89,11 +90,8 @@ export async function listAchievements(group: Group) {
 
 export async function listUserAchievements(user: User, group: Group) {
 	const token = await generateToken(user, group);
-	bot().sendMessage(
-		group,
-		`<a href="http://127.0.0.1:3000/${token}">http://localhost:3000/${token}</a>`,
-		{
-			parse_mode: 'HTML',
-		},
-	);
+	const url = `${URL_BASE}/${token}`;
+	bot().sendMessage(group, `<a href="${url}">${url}</a>`, {
+		parse_mode: 'HTML',
+	});
 }
