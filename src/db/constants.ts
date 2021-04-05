@@ -42,6 +42,11 @@ export const HAS_POLED_QUERY = `
 	FROM poles
 	WHERE user = ? AND group_id = ? AND timestamp >= ?
 `;
+export const HAS_POLED_TIME_QUERY = `
+	SELECT COUNT(*) as n, MAX(timestamp) as time
+	FROM poles
+	WHERE user = ? AND group_id = ? AND timestamp >= ?
+`;
 export type WhichPoleParams = [Group, number];
 export interface WhichPoleResult {
 	n: number;
