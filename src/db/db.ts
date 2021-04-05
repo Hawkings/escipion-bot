@@ -56,6 +56,8 @@ export enum SavePoleStatus {
 	WRONG_TIME,
 	REPEATED,
 	NO_POLES_LEFT,
+	NO_POLES_LEFT_CLOSE_CALL,
+	NO_POLES_LEFT_SHAME,
 	SUCCESS,
 }
 
@@ -126,7 +128,25 @@ export function maybeSavePole(user: User, group: Group, time: Date): SavePoleRes
 
 	const {n: polesBefore} = whichPoleStmt.get(group, toDbTime(hourStart));
 	if (polesBefore >= 3) {
-		return {status: SavePoleStatus.NO_POLES_LEFT};
+    /**
+    If time <1 min: close call
+    If time <5 min: normal fail
+    If time >55 min: normal fail
+    Else: fail of shame 
+    */
+    const time_since_start = now.getTime() - hourStart.getTime();
+    if (time_since_start < 60000){
+        return{status: SavePoleStatus.NO_POLES_LEFT_CLOSE_CALL};
+    }
+    else if (time_since_start < 300000){
+        return{status: SavePoleStatus.NO_POLES_LEFT};
+    }
+    else if (time_since_start > 3300000){
+        return{status: SavePoleStatus.NO_POLES_LEFT};
+    }
+    else {
+        return{status: SavePoleStatus.NO_POLES_LEFT_SHAME};
+    }
 	}
 	const poleType = poleTimes.get(hour)?.[polesBefore] ?? secretPoles[polesBefore];
 	const result = insertStmt.run(user, poleType, group, toDbTime(now));
