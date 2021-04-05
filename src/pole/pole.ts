@@ -20,7 +20,9 @@ const successfulPoleMessage: Record<ValidPoleType, string> = {
 
 const failedPoleMessage: Record<Exclude<SavePoleStatus, SavePoleStatus.SUCCESS>, string> = {
 	[SavePoleStatus.ERROR]: 'He petado, Dani no sabe programar',
-	[SavePoleStatus.NO_POLES_LEFT]: '¡$user ha conseguido el FAIL! (0 puntos)',
+	[SavePoleStatus.NO_POLES_LEFT]: '¡Demasiado tarde! Ya no queda nada',
+	[SavePoleStatus.NO_POLES_LEFT_CLOSE_CALL]: '¡$user ha conseguido el FAIL! (0 puntos)',
+	[SavePoleStatus.NO_POLES_LEFT_SHAME]: '¡$user ha conseguido el FAIL OF SHAME! (-1 punto)',
 	[SavePoleStatus.REPEATED]: 'Deja algo para los demás, $user',
 	[SavePoleStatus.WRONG_TIME]: 'A esta hora no hay poles que valgan',
 };
