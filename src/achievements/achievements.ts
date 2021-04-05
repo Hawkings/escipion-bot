@@ -21,6 +21,8 @@ export interface OnPoleParams {
 	totalScore: number;
 }
 
+export type AchievementContext = Pick<OnPoleParams, 'poles' | 'totalScore'>;
+
 export interface Achievement {
 	id: AchievementId;
 	name: string;
@@ -31,6 +33,11 @@ export interface Achievement {
 	 * Should return true if the player has obtained the achievement after the pole.
 	 */
 	onPole?(params: OnPoleParams): boolean;
+	/**
+	 * Should return a number between 0 and 1 indicating the completion percentage.
+	 * Should only be present for achievements for which a completion percentage makes sense.
+	 */
+	completionPercentage?(context: AchievementContext): number;
 }
 
 export const ALL_ACHIEVEMENTS = [...NORMAL_ACHIEVEMENTS];
@@ -40,22 +47,26 @@ if (ALL_ACHIEVEMENTS.length !== achievements.size) {
 	process.exit(1);
 }
 
+export function createAchievementContext(user: User, group: Group): AchievementContext {
+	return {
+		poles: getUserPoles(user, group),
+		totalScore: getUserScore(user, group).score,
+	};
+}
+
 export async function onPole(user: User, group: Group, savePoleResult: SavePoleResult, time: Date) {
 	const userAchievements = new Set(
 		getUserAchievements(user, group).map(({achievementId}) => achievementId),
 	);
-	const userPoles = getUserPoles(user, group);
-	const userScore = getUserScore(user, group);
 	const obtainedAchievements: Achievement[] = [];
 	for (const achievement of achievements.values()) {
 		if (userAchievements.has(achievement.id)) {
 			continue;
 		}
 		const obtained = achievement.onPole?.({
-			poles: userPoles,
+			...createAchievementContext(user, group),
 			lastPoleSaveResult: savePoleResult,
 			lastPoleTime: time,
-			totalScore: userScore.score,
 		});
 		if (obtained) {
 			saveAchievement(user, group, achievement.id);

@@ -1,27 +1,14 @@
-import {Achievement, AchievementId, OnPoleParams} from './achievements';
+import {Achievement, AchievementId} from './achievements';
 import {GOLD_POLES, PoleType, POLE_TYPES_COUNT} from '../types';
-import {countBronzePoles, countGoldPoles, countSilverPoles} from './util';
+import {
+	countBronzePoles,
+	countGoldPoles,
+	countScore,
+	countSecretPoles,
+	countSilverPoles,
+	createCountBasedAchievements,
+} from './util';
 import {SavePoleStatus} from '../db/db';
-
-function secretPoleCounter(amount: number) {
-	return ({poles}: OnPoleParams) => (poles.get(PoleType.SECRET_GOLD) ?? 0) >= amount;
-}
-
-function goldPoleCounter(amount: number) {
-	return ({poles}: OnPoleParams) => countGoldPoles(poles) >= amount;
-}
-
-function silverPoleCounter(amount: number) {
-	return ({poles}: OnPoleParams) => countSilverPoles(poles) >= amount;
-}
-
-function bronzePoleCounter(amount: number) {
-	return ({poles}: OnPoleParams) => countBronzePoles(poles) >= amount;
-}
-
-function scoreCounter(amount: number) {
-	return ({totalScore}: OnPoleParams) => totalScore >= amount;
-}
 
 const nonSecretGolds = new Set(
 	Array.from(GOLD_POLES.keys()).filter(type => type !== PoleType.SECRET_GOLD),
@@ -45,77 +32,79 @@ export const NORMAL_ACHIEVEMENTS: Achievement[] = [
 		onPole({poles}) {
 			return poles.size === POLE_TYPES_COUNT;
 		},
+		completionPercentage({poles}) {
+			return poles.size / POLE_TYPES_COUNT;
+		},
 	},
-	{
-		id: 2 as AchievementId,
-		name: 'Detective novato',
-		emoji: '🕵️‍♂️',
-		description: 'Consigue una pole secreta.',
-		onPole: secretPoleCounter(1),
-	},
-	{
-		id: 3 as AchievementId,
-		name: 'Detective profesional',
-		emoji: '🕵️‍♂️',
-		description: 'Consigue 10 poles secretas.',
-		onPole: secretPoleCounter(10),
-	},
-	{
-		id: 4 as AchievementId,
-		name: 'Agente secreto',
-		emoji: '🕵️‍♂️',
-		description: 'Consigue 25 poles secretas.',
-		onPole: secretPoleCounter(25),
-	},
-	{
-		id: 5 as AchievementId,
-		name: 'Espía',
-		emoji: '🕵️‍♂️',
-		description: 'Consigue 50 poles secretas.',
-		onPole: secretPoleCounter(50),
-	},
-	{
-		id: 6 as AchievementId,
-		name: 'Superespía',
-		emoji: '🕵️‍♂️',
-		description: 'Consigue 100 poles secretas.',
-		onPole: secretPoleCounter(100),
-	},
-	{
-		id: 7 as AchievementId,
-		name: 'Poleador amateur',
-		emoji: '🏁',
-		description: 'Consigue 50 poles de cualquier tipo.',
-		onPole: goldPoleCounter(50),
-	},
-	{
-		id: 8 as AchievementId,
-		name: 'Poleador intermedio',
-		emoji: '🏁',
-		description: 'Consigue 100 poles de cualquier tipo.',
-		onPole: goldPoleCounter(100),
-	},
-	{
-		id: 9 as AchievementId,
-		name: 'Poleador profesional',
-		emoji: '🏁',
-		description: 'Consigue 250 poles de cualquier tipo.',
-		onPole: goldPoleCounter(250),
-	},
-	{
-		id: 10 as AchievementId,
-		name: 'Poleador nato',
-		emoji: '🏁',
-		description: 'Consigue 500 poles de cualquier tipo.',
-		onPole: goldPoleCounter(500),
-	},
-	{
-		id: 11 as AchievementId,
-		name: 'El loco de las poles',
-		emoji: '🏁',
-		description: 'Consigue 1000 poles de cualquier tipo.',
-		onPole: goldPoleCounter(1000),
-	},
+	...createCountBasedAchievements(
+		{
+			description: target =>
+				target === 1 ? 'Consigue una pole secreta.' : `Consigue ${target} poles secretas.`,
+			startId: 2,
+			countFn: countSecretPoles,
+		},
+		[
+			{
+				name: 'Detective novato',
+				emoji: '❓',
+				target: 1,
+			},
+			{
+				name: 'Detective profesional',
+				emoji: '🔍',
+				target: 10,
+			},
+			{
+				name: 'Agente secreto',
+				emoji: '🔬',
+				target: 25,
+			},
+			{
+				name: 'Espía',
+				emoji: '🕵️',
+				target: 50,
+			},
+			{
+				name: 'Superespía',
+				emoji: '🤵',
+				target: 100,
+			},
+		],
+	),
+	...createCountBasedAchievements(
+		{
+			description: target => `Consigue ${target} poles de cualquier tipo.`,
+			startId: 7,
+			countFn: countGoldPoles,
+		},
+		[
+			{
+				name: 'Poleador amateur',
+				emoji: '🚶‍♂️',
+				target: 50,
+			},
+			{
+				name: 'Poleador intermedio',
+				emoji: '🏃‍♂️',
+				target: 100,
+			},
+			{
+				name: 'Poleador profesional',
+				emoji: '🚴‍♂️',
+				target: 250,
+			},
+			{
+				name: 'Poleador nato',
+				emoji: '🏎️',
+				target: 500,
+			},
+			{
+				name: 'El loco de las poles',
+				emoji: '🚀',
+				target: 1000,
+			},
+		],
+	),
 	{
 		id: 12 as AchievementId,
 		name: 'Malabarista',
@@ -154,102 +143,106 @@ export const NORMAL_ACHIEVEMENTS: Achievement[] = [
 			);
 		},
 	},
-	{
-		id: 15 as AchievementId,
-		name: 'Segundón',
-		emoji: '🐟',
-		description: 'Consigue 50 platas de cualquier tipo.',
-		onPole: silverPoleCounter(50),
-	},
-	{
-		id: 16 as AchievementId,
-		name: 'Segundón empedernido',
-		emoji: '🐠',
-		description: 'Consigue 100 platas de cualquier tipo.',
-		onPole: silverPoleCounter(100),
-	},
-	{
-		id: 17 as AchievementId,
-		name: 'Segundón profesional',
-		emoji: '🐡',
-		description: 'Consigue 250 platas de cualquier tipo.',
-		onPole: silverPoleCounter(250),
-	},
-	{
-		id: 18 as AchievementId,
-		name: 'Segundón experto',
-		emoji: '🐬',
-		description: 'Consigue 500 platas de cualquier tipo.',
-		onPole: silverPoleCounter(500),
-	},
-	{
-		id: 19 as AchievementId,
-		name: 'Medallista de plata',
-		emoji: '🐋',
-		description: 'Consigue 1000 platas de cualquier tipo.',
-		onPole: silverPoleCounter(1000),
-	},
-	{
-		id: 20 as AchievementId,
-		name: 'It’s something',
-		emoji: '🐜',
-		description: 'Consigue 50 bronces de cualquier tipo.',
-		onPole: bronzePoleCounter(50),
-	},
-	{
-		id: 21 as AchievementId,
-		name: 'La edad del bronce',
-		emoji: '🐛',
-		description: 'Consigue 100 bronces de cualquier tipo.',
-		onPole: bronzePoleCounter(100),
-	},
-	{
-		id: 22 as AchievementId,
-		name: 'Segundón profesional',
-		emoji: '🐌',
-		description: 'Consigue 250 bronces de cualquier tipo.',
-		onPole: bronzePoleCounter(250),
-	},
-	{
-		id: 23 as AchievementId,
-		name: 'Coleccionista de céntimos',
-		emoji: '🕷',
-		description: 'Consigue 500 bronces de cualquier tipo.',
-		onPole: bronzePoleCounter(500),
-	},
-	{
-		id: 24 as AchievementId,
-		name: 'Medallista de bronce',
-		emoji: '🦂',
-		description: 'Consigue 1000 bronces de cualquier tipo.',
-		onPole: bronzePoleCounter(1000),
-	},
-	{
-		id: 25 as AchievementId,
-		name: 'Jugador respetable',
-		emoji: '🐯',
-		description: 'Consigue 100 puntos en total',
-		onPole: scoreCounter(100),
-	},
-	{
-		id: 26 as AchievementId,
-		name: 'Jugador dedicado',
-		emoji: '🦁',
-		description: 'Consigue 250 puntos en total',
-		onPole: scoreCounter(250),
-	},
-	{
-		id: 27 as AchievementId,
-		name: 'Jugador profesional',
-		emoji: '🦖',
-		description: 'Consigue 500 puntos en total',
-		onPole: scoreCounter(500),
-	},
-	{
-		id: 28 as AchievementId,
-		name: 'Jugador profesional',
-		emoji: '🐲',
-		description: 'Consigue 1000 puntos en total',
-		onPole: scoreCounter(1000),
-	},
+	...createCountBasedAchievements(
+		{
+			description: target => `Consigue ${target} platas de cualquier tipo.`,
+			startId: 15,
+			countFn: countSilverPoles,
+		},
+		[
+			{
+				name: 'Segundón',
+				emoji: '🐟',
+				target: 50,
+			},
+			{
+				name: 'Segundón empedernido',
+				emoji: '🐠',
+				target: 100,
+			},
+			{
+				name: 'Segundón profesional',
+				emoji: '🐡',
+				target: 250,
+			},
+			{
+				name: 'Segundón experto',
+				emoji: '🐬',
+				target: 500,
+			},
+			{
+				name: 'Medallista de plata',
+				emoji: '🐋',
+				target: 1000,
+			},
+		],
+	),
+	...createCountBasedAchievements(
+		{
+			description: target => `Consigue ${target} bronces de cualquier tipo.`,
+			startId: 20,
+			countFn: countBronzePoles,
+		},
+		[
+			{
+				name: 'It’s something',
+				emoji: '🐜',
+				target: 50,
+			},
+			{
+				name: 'Chatarrero',
+				emoji: '🐛',
+				target: 100,
+			},
+			{
+				name: 'Coleccionista de céntimos',
+				emoji: '🐌',
+				target: 250,
+			},
+			{
+				name: 'La edad del bronce',
+				emoji: '🕷',
+				target: 500,
+			},
+			{
+				name: 'Medallista de bronce',
+				emoji: '🦂',
+				target: 1000,
+			},
+		],
+	),
+	...createCountBasedAchievements(
+		{
+			description: target => `Consigue ${target} puntos en total.`,
+			startId: 25,
+			countFn: countScore,
+		},
+		[
+			{
+				name: 'Jugador respetable',
+				emoji: '🐯',
+				target: 100,
+			},
+			{
+				name: 'Jugador dedicado',
+				emoji: '🦁',
+				target: 250,
+			},
+			{
+				name: 'Jugador profesional',
+				emoji: '🦖',
+				target: 500,
+			},
+			{
+				name: 'Jugador de élite',
+				emoji: '🐲',
+				target: 1000,
+			},
+			{
+				name: 'Jugador definitivo',
+				emoji: '🐉',
+				target: 2500,
+			},
+		],
+	),
 ];

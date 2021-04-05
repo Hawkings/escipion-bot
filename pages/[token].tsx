@@ -1,5 +1,9 @@
 import 'react';
-import {AchievementId, ALL_ACHIEVEMENTS} from '../src/achievements/achievements';
+import {
+	AchievementId,
+	ALL_ACHIEVEMENTS,
+	createAchievementContext,
+} from '../src/achievements/achievements';
 import {GetServerSideProps} from 'next';
 import {getTokenInfo, getUserAchievements} from '../src/db/db';
 import Main from '../components/main';
@@ -25,6 +29,7 @@ export interface AchievementProp {
 	emoji: string;
 	description: string;
 	obtainedDate: number | null;
+	completionPct?: number | null;
 }
 type Props =
 	| {
@@ -50,13 +55,23 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
 			timestamp,
 		]),
 	);
-	const achievements = ALL_ACHIEVEMENTS.map(achievement => ({
-		id: achievement.id,
-		name: achievement.name,
-		emoji: achievement.emoji,
-		description: achievement.description,
-		obtainedDate: obtainedAchievements.get(achievement.id) ?? null,
-	})).sort((a, b) => {
+	const achievements = ALL_ACHIEVEMENTS.map(achievement => {
+		const obtainedDate = obtainedAchievements.get(achievement.id) ?? null;
+		let completionPct =
+			achievement.completionPercentage?.(createAchievementContext(userInfo.user, userInfo.group)) ??
+			null;
+		if (completionPct !== null) {
+			completionPct = completionPct * 100;
+		}
+		return {
+			id: achievement.id,
+			name: achievement.name,
+			emoji: achievement.emoji,
+			description: achievement.description,
+			obtainedDate,
+			completionPct,
+		};
+	}).sort((a, b) => {
 		if (a.obtainedDate) {
 			if (b.obtainedDate) {
 				return a.obtainedDate - b.obtainedDate;
@@ -64,6 +79,18 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
 				return -1;
 			}
 		} else if (b.obtainedDate) {
+			return 1;
+		} else if (a.completionPct) {
+			if (b.completionPct) {
+				if (a.completionPct === b.completionPct) {
+					return a.id - b.id;
+				} else {
+					return b.completionPct - a.completionPct;
+				}
+			} else {
+				return -1;
+			}
+		} else if (b.completionPct) {
 			return 1;
 		} else {
 			return a.id - b.id;
