@@ -63,6 +63,9 @@ export const getServerSideProps: GetServerSideProps<Props> = async context => {
 		if (completionPct !== null) {
 			completionPct = completionPct * 100;
 		}
+		if (obtainedDate) {
+			completionPct = null;
+		}
 		return {
 			id: achievement.id,
 			name: achievement.name,
