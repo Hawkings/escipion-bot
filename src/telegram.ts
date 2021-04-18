@@ -1,11 +1,20 @@
 import TelegramBot from 'node-telegram-bot-api';
 import {token} from '../secret';
 import {Group, User} from './types';
+import getConfig from 'next/config';
+
+const nextConfig = getConfig();
 
 let telegramBot: TelegramBot | undefined;
 export function bot() {
 	if (!telegramBot) {
-		telegramBot = new TelegramBot(token, {polling: true});
+		// This file is compiled twice: one for next.js and another for the normal server. We want
+		// polling to be enabled on the normal server only.
+		if (nextConfig && nextConfig.serverRuntimeConfig.usingNext) {
+			telegramBot = new TelegramBot(token, {polling: false});
+		} else {
+			telegramBot = new TelegramBot(token, {polling: true});
+		}
 	}
 	return telegramBot;
 }
