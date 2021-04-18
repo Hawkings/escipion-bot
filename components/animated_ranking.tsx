@@ -102,8 +102,8 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 		const date = new Date(poleHistory[Math.min(i, poleHistory.length - 1)].timestamp * 1000);
 		return (
 			<div
-				className="text-gray-300 text-lg absolute"
-				style={{right: '0.5rem', top: (ranking.length - 1) * LINE_HEIGHT + 24}}
+				className="text-gray-300 text-xl absolute"
+				style={{right: '0.5rem', top: (ranking.length - 1) * LINE_HEIGHT + 20}}
 			>
 				{formatDate(date)}
 			</div>
