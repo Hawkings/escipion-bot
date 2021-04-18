@@ -93,7 +93,7 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 				setState({i: 0, ranking});
 			}}
 		>
-			⏵
+			Empezar
 		</button>
 	);
 
