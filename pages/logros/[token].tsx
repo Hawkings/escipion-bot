@@ -3,11 +3,11 @@ import {
 	AchievementId,
 	ALL_ACHIEVEMENTS,
 	createAchievementContext,
-} from '../src/achievements/achievements';
+} from '../../src/achievements/achievements';
 import {GetServerSideProps} from 'next';
-import {getTokenInfo, getUserAchievements} from '../src/db/db';
-import Main from '../components/main';
-import Achievement from '../components/achievement';
+import {getAchievementTokenInfo, getUserAchievements} from '../../src/db/db';
+import Main from '../../components/main';
+import Achievement from '../../components/achievement';
 
 export default function Post(props: Props) {
 	if (!props.valid) {
@@ -41,7 +41,7 @@ type Props =
 	  };
 export const getServerSideProps: GetServerSideProps<Props> = async context => {
 	const token = context.query.token as string;
-	const userInfo = getTokenInfo(token);
+	const userInfo = getAchievementTokenInfo(token);
 	if (!userInfo) {
 		return {
 			props: {

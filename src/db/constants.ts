@@ -172,8 +172,7 @@ export const GET_USER_POLE_TIMES_QUERY = `
 export const CREATE_WEB_TOKENS_QUERY = `
 	CREATE TABLE IF NOT EXISTS web_tokens (
 		token VARCHAR(64) PRIMARY KEY,
-		user VARCHAR(30) NOT NULL,
-		group_id VARCHAR(30) NOT NULL
+		value TEXT NOT NULL
 	)
 `;
 
@@ -181,16 +180,15 @@ export type GetTokenInfoParams = [string];
 export type GetTokenInfoResult =
 	| undefined
 	| {
-			user: User;
-			group: Group;
+			value: string;
 	  };
 export const GET_TOKEN_INFO_QUERY = `
-	SELECT user, group_id as 'group'
+	SELECT value
 	FROM web_tokens
 	WHERE token = ?
 `;
 
-export type GetTokenParams = [User, Group];
+export type GetTokenParams = [string];
 export type GetTokenResult =
 	| undefined
 	| {
@@ -199,13 +197,13 @@ export type GetTokenResult =
 export const GET_TOKEN_QUERY = `
 	SELECT token
 	FROM web_tokens
-	WHERE user = ? AND group_id = ?
+	WHERE value = ?
 `;
 
-export type CreateTokenParams = [string, User, Group];
+export type CreateTokenParams = [string, string];
 export const CREATE_TOKEN_QUERY = `
-	INSERT INTO web_tokens (token, user, group_id)
-	VALUES (?, ?, ?)
+	INSERT INTO web_tokens (token, value)
+	VALUES (?, ?)
 `;
 
 export type GetUserScoreParams = [Group, number, User];
@@ -235,4 +233,18 @@ export const GET_USER_SCORE_QUERY = `
 		GROUP BY user
 	)
 	WHERE user = ?
+`;
+
+export type GetAllPolesParams = [Group, number, number];
+export interface GetAllPolesResult {
+	user: User;
+	group: Group;
+	type: PoleType;
+	timestamp: number;
+}
+export const GET_ALL_POLES_QUERY = `
+	SELECT user, group_id as 'group', type, timestamp
+	FROM poles
+	WHERE group_id = ? AND timestamp >= ? AND timestamp < ?
+	ORDER BY timestamp ASC
 `;

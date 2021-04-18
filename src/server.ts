@@ -4,6 +4,7 @@ import {createServer as insecureCreateServer} from 'http';
 import {parse} from 'url';
 import {TLS_CERT_PATH, TLS_KEY_PATH, URL_BASE, WEB_PORT} from '../secret';
 import fs from 'fs';
+import {maybeGetAvatar} from './avatars';
 
 export async function startNextServer() {
 	const dev = process.env.NODE_ENV !== 'production';
@@ -20,10 +21,16 @@ export async function startNextServer() {
 
 	await app.prepare();
 	const createServerFn = 'cert' in options ? createServer : insecureCreateServer;
-	createServerFn(options, (req, res) => {
-		const parsedUrl = parse(req.url!, true);
-
-		handle(req, res, parsedUrl);
+	createServerFn(options, async (req, res) => {
+		const avatarFile = await maybeGetAvatar(req.url!);
+		if (avatarFile) {
+			res.end(await avatarFile.readFile());
+			avatarFile.close();
+		} else {
+			// Next.js uses the legacy `url.parse` method.
+			const parsedUrl = parse(req.url!, true);
+			handle(req, res, parsedUrl);
+		}
 	}).listen(WEB_PORT, () => {
 		console.log(`> Ready on ${URL_BASE} on port ${WEB_PORT} with dev=${dev}`);
 	});

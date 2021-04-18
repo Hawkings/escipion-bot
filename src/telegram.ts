@@ -20,3 +20,17 @@ export async function getUserName(group: Group, user: User): Promise<string> {
 	}
 	return userName;
 }
+
+const MAX_AVATAR_SIZE = 2 * 2 ** 20;
+
+export async function downloadUserPicture(user: User) {
+	try {
+		const {photos} = await bot().getUserProfilePhotos(user, {limit: 1});
+		if (!photos.length || !photos[0].length) return;
+		const {file_size: size, file_id: fileId} = photos[0][0];
+		if (!size || size > MAX_AVATAR_SIZE) return;
+		return bot().getFileStream(fileId);
+	} catch {
+		console.error('Error while fetching avatars of', user);
+	}
+}

@@ -1,4 +1,5 @@
 import {listAchievements, listUserAchievements} from './achievements/achievements';
+import {animatedRanking} from './animated_ranking/animated_ranking';
 import config from './config';
 import {pole} from './pole/pole';
 import {ranking} from './ranking/ranking';
@@ -33,6 +34,11 @@ bot().onText(/^\/mislogros/i, msg => {
 	if (!userId) return;
 	const user = toUser(userId);
 	listUserAchievements(user, group);
+});
+
+bot().onText(/^\/animacionranking/i, msg => {
+	const group = toGroup(msg.chat.id);
+	animatedRanking(group);
 });
 
 startNextServer();

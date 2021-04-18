@@ -28,6 +28,22 @@ export enum PoleType {
 	SECRET_BRONZE = 12,
 }
 
+export const POLE_POINTS = {
+	[PoleType.UNKNOWN]: 0,
+	[PoleType.NORMAL_GOLD]: 5,
+	[PoleType.NORMAL_SILVER]: 2,
+	[PoleType.NORMAL_BRONZE]: 1,
+	[PoleType.ANDALUSIAN_GOLD]: 5,
+	[PoleType.ANDALUSIAN_SILVER]: 2,
+	[PoleType.ANDALUSIAN_BRONZE]: 1,
+	[PoleType.RUSSIAN_GOLD]: 5,
+	[PoleType.RUSSIAN_SILVER]: 2,
+	[PoleType.RUSSIAN_BRONZE]: 1,
+	[PoleType.SECRET_GOLD]: 5,
+	[PoleType.SECRET_SILVER]: 2,
+	[PoleType.SECRET_BRONZE]: 1,
+};
+
 export const POLE_TYPES_COUNT = Object.keys(PoleType).length / 2 - 1;
 export const GOLD_POLES = new Set([
 	PoleType.NORMAL_GOLD,

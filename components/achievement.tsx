@@ -1,5 +1,5 @@
 import 'react';
-import {AchievementProp} from '../pages/[token]';
+import {AchievementProp} from '../pages/logros/[token]';
 
 export default function Achievement({achievement}: {achievement: AchievementProp}) {
 	const {name, emoji, description, obtainedDate, completionPct} = achievement;
