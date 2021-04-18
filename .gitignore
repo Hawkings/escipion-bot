@@ -32,7 +32,7 @@ bin/
 secret.ts
 
 # Database
-escipion.db
+escipion.db*
 
 # Next.js
 .next
