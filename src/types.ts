@@ -26,6 +26,9 @@ export enum PoleType {
 	SECRET_GOLD = 10,
 	SECRET_SILVER = 11,
 	SECRET_BRONZE = 12,
+	CANARY_GOLD = 13,
+	CANARY_SILVER = 14,
+	CANARY_BRONZE = 15,
 }
 
 export const POLE_POINTS = {
@@ -42,6 +45,9 @@ export const POLE_POINTS = {
 	[PoleType.SECRET_GOLD]: 5,
 	[PoleType.SECRET_SILVER]: 2,
 	[PoleType.SECRET_BRONZE]: 1,
+	[PoleType.CANARY_GOLD]: 5,
+	[PoleType.CANARY_SILVER]: 2,
+	[PoleType.CANARY_BRONZE]: 1,
 };
 
 export const POLE_TYPES_COUNT = Object.keys(PoleType).length / 2 - 1;
@@ -50,18 +56,21 @@ export const GOLD_POLES = new Set([
 	PoleType.ANDALUSIAN_GOLD,
 	PoleType.RUSSIAN_GOLD,
 	PoleType.SECRET_GOLD,
+	PoleType.CANARY_GOLD,
 ]);
 export const SILVER_POLES = new Set([
 	PoleType.NORMAL_SILVER,
 	PoleType.ANDALUSIAN_SILVER,
 	PoleType.RUSSIAN_SILVER,
 	PoleType.SECRET_SILVER,
+	PoleType.CANARY_SILVER,
 ]);
 export const BRONZE_POLES = new Set([
 	PoleType.NORMAL_BRONZE,
 	PoleType.ANDALUSIAN_BRONZE,
 	PoleType.RUSSIAN_BRONZE,
 	PoleType.SECRET_BRONZE,
+	PoleType.CANARY_BRONZE,
 ]);
 
 export type ValidPoleType = Exclude<PoleType, PoleType.UNKNOWN>;

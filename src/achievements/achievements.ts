@@ -6,8 +6,8 @@ import {
 	getUserPoles,
 	getUserScore,
 	saveAchievement,
-	SavePoleResult,
 } from '../db/db';
+import {SavePoleResult} from '../pole/pole';
 import {bot, getUserName} from '../telegram';
 import {Group, PoleType, User} from '../types';
 import {NORMAL_ACHIEVEMENTS} from './normal_achievements';
