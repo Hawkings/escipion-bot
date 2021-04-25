@@ -111,10 +111,13 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 	};
 
 	return (
-		<div className="relative min-h-full bg-mine-darker text-mine-primary">
+		<div
+			className="relative h-full bg-mine-darker text-mine-primary grid"
+			style={{gridTemplateColumns: 'auto 1fr auto'}}
+		>
 			{i === -1 ? startButton : null}
 			{scoreBars}
-			{displayDate()}
+			<div className="relative min-h-full">{displayDate()}</div>
 		</div>
 	);
 }
