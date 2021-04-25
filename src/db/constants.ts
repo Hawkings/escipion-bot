@@ -73,7 +73,10 @@ export const INSERT_POLE_VALUES_QUERY = `
 	(${PoleType.RUSSIAN_BRONZE}, 1),
 	(${PoleType.SECRET_GOLD}, 5),
 	(${PoleType.SECRET_SILVER}, 2),
-	(${PoleType.SECRET_BRONZE}, 1)
+	(${PoleType.SECRET_BRONZE}, 1),
+	(${PoleType.CANARY_GOLD}, 5),
+	(${PoleType.CANARY_SILVER}, 2),
+	(${PoleType.CANARY_BRONZE}, 1)
 `;
 
 export const CREATE_POLES_QUERY = `
