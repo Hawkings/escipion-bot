@@ -41,6 +41,10 @@ export function getNextSeasonStart(date: Date): Date {
 	return addDaysToDate(REFERENCE_DATE, Math.floor(14 * (deltaSeasons + 1)));
 }
 
+export function getCurrentSeasonStart(): Date {
+	return getSeasonStart(new Date());
+}
+
 const monthNames = [
 	'enero',
 	'febrero',
@@ -85,4 +89,38 @@ export function createRandomToken(): Promise<string> {
 /** Returns a promise that resolves after the specified number of milliseconds. */
 export function sleep(ms: number) {
 	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export function truncateToHour(date: Date) {
+	const truncated = new Date(date);
+	truncated.setMilliseconds(0);
+	truncated.setSeconds(0);
+	truncated.setMinutes(0);
+	return truncated;
+}
+
+export function truncateToDay(date: Date) {
+	const truncated = new Date(date);
+	truncated.setMilliseconds(0);
+	truncated.setSeconds(0);
+	truncated.setMinutes(0);
+	truncated.setHours(0);
+	return truncated;
+}
+
+/**
+ * Receives a random arbitrary number and returns a random hour, excluding the hours that already
+ * have a pole.
+ */
+export function toRandomHour(random: number, usedHours: number[]) {
+	const mod = 24 - usedHours.length;
+	let hour = ((random % mod) + mod) % mod;
+	for (const usedHour of usedHours) {
+		if (usedHour <= hour) {
+			hour++;
+		} else {
+			break;
+		}
+	}
+	return hour;
 }

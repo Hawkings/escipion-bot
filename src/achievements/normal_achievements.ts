@@ -8,7 +8,7 @@ import {
 	countSilverPoles,
 	createCountBasedAchievements,
 } from './util';
-import {SavePoleStatus} from '../db/db';
+import {SavePoleStatus} from '../pole/pole';
 
 const nonSecretGolds = new Set(
 	Array.from(GOLD_POLES.keys()).filter(type => type !== PoleType.SECRET_GOLD),
