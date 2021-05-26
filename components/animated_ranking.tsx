@@ -79,7 +79,7 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 
 	const startButton = (
 		<button
-			className="fixed transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 border border-mine-primary text-mine-primary bg-mine-dark text-3xl px-4 py-1 rounded-md"
+			className="z-10 fixed transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 border border-mine-primary text-mine-primary bg-mine-dark text-3xl px-4 py-1 rounded-md"
 			onClick={() => {
 				setState({i: 0, ranking});
 			}}
