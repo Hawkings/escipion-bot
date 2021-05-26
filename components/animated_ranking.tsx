@@ -20,6 +20,7 @@ export interface UserRankingData {
 	avatar: string;
 	score: number;
 	rank: number;
+	originalRank: number;
 	highestScore: number;
 }
 
@@ -42,7 +43,7 @@ function updateRankingData(change: PoleHistory, prevRanking: UserRankingData[]) 
 			...val,
 			highestScore: ranking[0].score,
 		}))
-		.sort((a, b) => a.user.localeCompare(b.user));
+		.sort((a, b) => parseInt(a.user) - parseInt(b.user));
 }
 
 function startRanking(users: Record<User, UserData>): UserRankingData[] {
@@ -52,6 +53,7 @@ function startRanking(users: Record<User, UserData>): UserRankingData[] {
 		avatar,
 		score: 0,
 		rank: i,
+		originalRank: i,
 		highestScore: 0,
 	}));
 }
@@ -65,7 +67,6 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 		ranking: startRanking(users),
 		i: -1,
 	});
-	const [maxWidth, setMaxWidth] = useState(0);
 
 	if (i >= 0 && i < poleHistory.length) {
 		const change = poleHistory[i];
@@ -74,17 +75,7 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 		});
 	}
 
-	const scoreBars = ranking.map(val => (
-		<ScoreBar
-			{...val}
-			key={val.user}
-			hidden={i === -1}
-			reportWidth={width => {
-				if (width > maxWidth) setMaxWidth(width);
-			}}
-			textWidth={maxWidth}
-		/>
-	));
+	const scoreBars = ranking.map(val => <ScoreBar {...val} key={val.user} />);
 
 	const startButton = (
 		<button
@@ -100,24 +91,16 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 	const displayDate = () => {
 		if (i === -1) return;
 		const date = new Date(poleHistory[Math.min(i, poleHistory.length - 1)].timestamp * 1000);
-		return (
-			<div
-				className="text-gray-300 text-xl absolute"
-				style={{right: '0.5rem', top: (ranking.length - 1) * LINE_HEIGHT + 20}}
-			>
-				{formatDate(date)}
-			</div>
-		);
+		return <div className="text-gray-300 text-xl w-full text-right">{formatDate(date)}</div>;
 	};
 
 	return (
-		<div
-			className="relative h-full bg-mine-darker text-mine-primary grid"
-			style={{gridTemplateColumns: 'auto 1fr auto'}}
-		>
-			{i === -1 ? startButton : null}
-			{scoreBars}
-			<div className="relative min-h-full">{displayDate()}</div>
+		<div className="relative h-full bg-mine-darker text-mine-primary">
+			<div className="grid gap-0 p-3" style={{gridTemplateColumns: 'auto 1fr'}}>
+				{i === -1 ? startButton : null}
+				{scoreBars}
+				<div className="relative min-h-full col-span-full">{displayDate()}</div>
+			</div>
 		</div>
 	);
 }
