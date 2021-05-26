@@ -38,6 +38,7 @@ export function ScoreBar({
 					className="h-8 relative transition-all ease-linear duration-200"
 					style={{
 						width: `${percentage}%`,
+						minWidth: '32px',
 						backgroundColor: randomColor(originalRank),
 					}}
 				>
