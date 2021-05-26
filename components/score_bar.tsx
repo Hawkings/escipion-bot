@@ -24,7 +24,7 @@ export function ScoreBar({
 	return (
 		<>
 			<div
-				className="my-1 mr-2 text-mine-primary text-right text-xl whitespace-nowrap overflow-ellipsis relative transition-all ease-linear duration-200"
+				className="my-1 mr-2 text-mine-primary text-right text-xl whitespace-nowrap overflow-ellipsis overflow-hidden max-w-10ch md:max-w-none relative transition-all ease-linear duration-200"
 				style={topOffsetStyle}
 			>
 				{userName}

@@ -95,7 +95,7 @@ export default function AnimatedRanking({poleHistory, users}: AnimatedRankingPar
 	};
 
 	return (
-		<div className="relative h-full bg-mine-darker text-mine-primary">
+		<div className="relative min-h-full bg-mine-darker text-mine-primary">
 			<div className="grid gap-0 p-3" style={{gridTemplateColumns: 'auto 1fr'}}>
 				{i === -1 ? startButton : null}
 				{scoreBars}

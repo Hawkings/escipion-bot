@@ -15,6 +15,9 @@ module.exports = {
 			fontWeight: {
 				inherit: 'inherit',
 			},
+			maxWidth: {
+				'10ch': '10ch',
+			}
 		},
 	},
 	variants: {
