@@ -9,7 +9,7 @@ export async function getImage(prompt: string): Promise<string> {
 	if (!prompt.trim()) {
 		throw Error('pero dime qué imagen quieres que te dé');
 	}
-	const now = performance.now();
+	const now = new Date().getTime();
 	if (now - lastInvocation < TIME_BETWEEN_CALLS) {
 		throw Error('espera un poco antes de pedir más imágenes');
 	}
