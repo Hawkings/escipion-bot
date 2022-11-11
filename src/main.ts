@@ -42,7 +42,7 @@ bot().onText(/^\/animacionranking/i, msg => {
 	animatedRanking(group);
 });
 
-bot().onText(/^\/dalle (.+)/i, async (msg, match) => {
+bot().onText(/^\/dalle(?:@\w+)? (.+)/i, async (msg, match) => {
 	try {
 		const imageUrl = await dalle.getImage(match?.[1] ?? '');
 		bot().sendPhoto(msg.chat.id, imageUrl, {reply_to_message_id: msg.message_id});
