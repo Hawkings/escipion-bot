@@ -1,6 +1,7 @@
 import {listAchievements, listUserAchievements} from './achievements/achievements';
 import {animatedRanking} from './animated_ranking/animated_ranking';
 import config from './config';
+import * as dalle from './dalle/dalle';
 import {pole} from './pole/pole';
 import {ranking} from './ranking/ranking';
 import {startNextServer} from './server';
@@ -39,6 +40,16 @@ bot().onText(/^\/mislogros/i, msg => {
 bot().onText(/^\/animacionranking/i, msg => {
 	const group = toGroup(msg.chat.id);
 	animatedRanking(group);
+});
+
+bot().onText(/^\/dalle (.+)/i, async (msg, match) => {
+	try {
+		const imageUrl = await dalle.getImage(match?.[1] ?? '');
+		bot().sendPhoto(msg.chat.id, imageUrl, {reply_to_message_id: msg.message_id});
+	} catch (e) {
+		bot().sendMessage(msg.chat.id, `Error: ${(e as Error).message}`);
+	}
+	console.log(match);
 });
 
 startNextServer();
