@@ -1,14 +1,11 @@
 import {listAchievements, listUserAchievements} from './achievements/achievements';
 import {animatedRanking} from './animated_ranking/animated_ranking';
-import config from './config';
 import * as dalle from './dalle/dalle';
 import {pole} from './pole/pole';
 import {ranking} from './ranking/ranking';
 import {startNextServer} from './server';
 import {bot} from './telegram';
 import {toGroup, toUser} from './types';
-
-console.log(config.port);
 
 bot().onText(/^(?:(?:sub)?pole|plata|bronce)/i, msg => {
 	const userId = msg.from?.id;
