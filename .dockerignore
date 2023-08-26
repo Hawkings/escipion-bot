@@ -1,0 +1,27 @@
+node_modules
+npm-debug.log
+
+# Coverage
+coverage
+
+# Transpiled files
+bin/
+
+# VS Code
+.vscode
+!.vscode/tasks.js
+
+# JetBrains IDEs
+.idea/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+.DS_Store
+
+# Next.js
+.next
