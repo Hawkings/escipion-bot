@@ -6,20 +6,19 @@ WORKDIR /home/escipion
 EXPOSE 3080
 
 RUN usermod -d /home/escipion -l escipion node
-RUN chown -R escipion /home/escipion
 USER escipion
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY package*.json ./
+COPY --chown=escipion package*.json ./
 
 # https://docs.npmjs.com/cli/v9/commands/npm-ci
 # like npm install but for prod
 RUN npm ci --omit=dev
 
 # Bundle app source
-COPY . .
+COPY --chown=escipion . .
 
 # Create the data directory
 RUN mkdir -p /home/escipion/data
