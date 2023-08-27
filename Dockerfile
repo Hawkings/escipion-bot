@@ -24,5 +24,5 @@ COPY . .
 # Create the data directory
 RUN mkdir -p /home/escipion/data
 
-RUN npm build
+RUN npm run build
 CMD [ "node", "bin/src/main.js" ]
