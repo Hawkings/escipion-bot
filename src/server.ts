@@ -1,6 +1,6 @@
 import next from 'next';
 import {createServer, ServerOptions} from 'https';
-import {createServer as insecureCreateServer} from 'http';
+import {IncomingMessage, createServer as insecureCreateServer, ServerResponse} from 'http';
 import {parse} from 'url';
 import {TLS_CERT_PATH, TLS_KEY_PATH, URL_BASE, WEB_PORT} from '../secret';
 import fs from 'fs';
@@ -20,8 +20,10 @@ export async function startNextServer() {
 			: {};
 
 	await app.prepare();
-	const createServerFn = 'cert' in options ? createServer : insecureCreateServer;
-	createServerFn(options, async (req, res) => {
+	const server =
+		'cert' in options ? createServer(options, serverFn) : insecureCreateServer(serverFn);
+
+	async function serverFn(req: IncomingMessage, res: ServerResponse) {
 		const avatarFile = await maybeGetAvatar(req.url!);
 		if (avatarFile) {
 			res.end(await avatarFile.readFile());
@@ -31,7 +33,8 @@ export async function startNextServer() {
 			const parsedUrl = parse(req.url!, true);
 			handle(req, res, parsedUrl);
 		}
-	}).listen(WEB_PORT, () => {
+	}
+	server.listen(WEB_PORT, () => {
 		console.log(`> Ready on ${URL_BASE} on port ${WEB_PORT} with dev=${dev}`);
 	});
 }

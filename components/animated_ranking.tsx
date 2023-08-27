@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {User} from '../src/types';
 import {formatDate, sleep} from '../src/util';
-import {LINE_HEIGHT, ScoreBar} from './score_bar';
+import {ScoreBar} from './score_bar';
 
 export interface UserData {
 	avatar: string;
