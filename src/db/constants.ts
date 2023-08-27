@@ -1,7 +1,7 @@
 import {AchievementId} from '../achievements/achievements';
 import {Group, PoleType, User} from '../types';
 
-export const DB_FILE_NAME = '/usr/src/escipion-bot/escipion.db';
+export const DB_FILE_NAME = '/home/escipion/data/escipion.db';
 
 export type InsertPoleParams = [User, PoleType, Group, number];
 export const INSERT_POLE_QUERY = `INSERT INTO poles (user, type, group_id, timestamp) values (?, ?, ?, ?)`;

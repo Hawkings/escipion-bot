@@ -1,9 +1,6 @@
 FROM node:18
 
-# Create the data directory
-RUN mkdir -p /usr/src/escipion-bot/data
-
-WORKDIR /usr/src/escipion-bot
+WORKDIR /home/escipion
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -20,4 +17,10 @@ COPY . .
 # Replace with the desired port
 EXPOSE 2080
 
-CMD [ "npm", "start" ]
+RUN usermod -d /home/escipion -l escipion node
+USER escipion
+
+# Create the data directory
+RUN mkdir -p /home/escipion/data
+
+CMD [ "node", "bin/src/main.js" ]
