@@ -11,14 +11,14 @@ USER escipion
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY --chown=escipion package*.json ./
+COPY --chown=escipion:node package*.json ./
 
 # https://docs.npmjs.com/cli/v9/commands/npm-ci
 # like npm install but for prod
 RUN npm ci --omit=dev
 
 # Bundle app source
-COPY --chown=escipion . .
+COPY --chown=escipion:node . .
 
 # Create the data directory
 RUN mkdir -p /home/escipion/data
