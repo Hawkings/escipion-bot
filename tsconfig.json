@@ -2,7 +2,8 @@
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "lib": [
-      "DOM"
+      "DOM",
+      "ES2022"
     ],
     "target": "ES2022",
     "module": "commonjs",
