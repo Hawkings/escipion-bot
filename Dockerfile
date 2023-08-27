@@ -1,6 +1,6 @@
 FROM node:18
 
-WORKDIR /src/app/escipion
+WORKDIR /usr/src/escipion
 
 # Replace with the desired port
 EXPOSE 3080
@@ -18,7 +18,7 @@ RUN npm ci --omit=dev
 COPY . .
 
 # Create the data directory
-RUN mkdir -p /src/app/escipion/data
+RUN mkdir -p /usr/src/escipion/data
 
 RUN npm run build
 CMD [ "node", "bin/src/main.js" ]
