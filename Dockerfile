@@ -23,4 +23,5 @@ USER escipion
 # Create the data directory
 RUN mkdir -p /home/escipion/data
 
+RUN npm build
 CMD [ "node", "bin/src/main.js" ]
