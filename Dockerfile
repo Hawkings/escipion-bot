@@ -6,7 +6,7 @@ WORKDIR /home/escipion
 EXPOSE 3080
 
 RUN usermod -d /home/escipion -l escipion node
-RUN chmod -R escipion /hom/escipion
+RUN chown -R escipion /hom/escipion
 USER escipion
 
 # Install app dependencies
