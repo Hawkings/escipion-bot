@@ -21,4 +21,5 @@ COPY . .
 RUN mkdir -p /usr/src/escipion/data
 
 RUN npm run build
+ENV TZ=Europe/Zurich
 CMD [ "node", "bin/src/main.js" ]
