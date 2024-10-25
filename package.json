@@ -1,57 +1,56 @@
 {
-  "name": "escipion-bot",
-  "version": "0.0.0",
-  "description": "Escipion bot. Better than Anibal.",
-  "engines": {
-    "node": ">= 14.15"
-  },
-  "devDependencies": {
-  },
-  "scripts": {
-    "prestart": "git pull origin master && npm run build",
-    "start": "node bin/src/main.js",
-    "clean": "rimraf coverage build tmp",
-    "build": "tsc -p tsconfig.json && next build",
-    "build-dev": "tsc -p tsconfig.json",
-    "build:watch": "tsc -w -p tsconfig.json",
-    "lint": "eslint . --ext .ts,.tsx",
-    "test": "jest --coverage",
-    "test:watch": "jest --watch",
-    "dev": "set NODE_OPTIONS='--inspect' && next dev",
-    "nbuild": "next build",
-    "nstart": "next start"
-  },
-  "author": "Hawkings",
-  "license": "MIT",
-  "dependencies": {
-    "@tsconfig/node18": "^18.2.1",
-    "@types/integer": "^4.0.1",
-    "@types/jest": "^29.5.4",
-    "@types/node-telegram-bot-api": "^0.61.7",
-    "@types/node": "^20.5.6",
-    "@types/react": "^18.2.21",
-    "@typescript-eslint/eslint-plugin": "^6.4.1",
-    "@typescript-eslint/parser": "^6.4.1",
-    "autoprefixer": "^10.4.0",
-    "better-sqlite3": "^7.4.4",
-    "eslint-config-prettier": "~8.3.0",
-    "eslint-plugin-jest": "^27.2.3",
-    "eslint": "^7.32.0",
-    "jest": "^29.6.4",
-    "next": "^12.0.3",
-    "node-telegram-bot-api": "^0.54.0",
-    "postcss": "^8.3.11",
-    "prettier": "~2.4.1",
-    "react-dom": "^17.0.2",
-    "react": "^17.0.2",
-    "rimraf": "~3.0.2",
-    "tailwindcss": "^3.3.3",
-    "ts-jest": "^29.1.1",
-    "tslib": "^2.3.1",
-    "tsutils": "~3.21.0",
-    "typescript": "^5.2.2"
-  },
-  "volta": {
-    "node": "18.12.0"
-  }
+	"name": "escipion-bot",
+	"version": "0.0.0",
+	"description": "Escipion bot. Better than Anibal.",
+	"engines": {
+		"node": ">= 14.15"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"prestart": "git pull origin master && npm run build",
+		"start": "node bin/src/main.js",
+		"clean": "rimraf coverage build tmp",
+		"build": "tsc -p tsconfig.json && next build",
+		"build-dev": "tsc -p tsconfig.json",
+		"build:watch": "tsc -w -p tsconfig.json",
+		"lint": "eslint . --ext .ts,.tsx",
+		"test": "jest --coverage",
+		"test:watch": "jest --watch",
+		"dev": "set NODE_OPTIONS='--inspect' && next dev",
+		"nbuild": "next build",
+		"nstart": "next start"
+	},
+	"author": "Hawkings",
+	"license": "MIT",
+	"dependencies": {
+		"@tsconfig/node18": "^18.2.1",
+		"@types/integer": "^4.0.1",
+		"@types/jest": "^29.5.4",
+		"@types/node-telegram-bot-api": "^0.61.7",
+		"@types/node": "^20.5.6",
+		"@types/react": "^18.2.21",
+		"@typescript-eslint/eslint-plugin": "^6.4.1",
+		"@typescript-eslint/parser": "^6.4.1",
+		"autoprefixer": "^10.4.0",
+		"better-sqlite3": "^11.5.0",
+		"eslint-config-prettier": "~8.3.0",
+		"eslint-plugin-jest": "^27.2.3",
+		"eslint": "^7.32.0",
+		"jest": "^29.6.4",
+		"next": "^12.0.3",
+		"node-telegram-bot-api": "^0.54.0",
+		"postcss": "^8.3.11",
+		"prettier": "~2.4.1",
+		"react-dom": "^17.0.2",
+		"react": "^17.0.2",
+		"rimraf": "~3.0.2",
+		"tailwindcss": "^3.3.3",
+		"ts-jest": "^29.1.1",
+		"tslib": "^2.3.1",
+		"tsutils": "~3.21.0",
+		"typescript": "^5.2.2"
+	},
+	"volta": {
+		"node": "18.12.0"
+	}
 }
