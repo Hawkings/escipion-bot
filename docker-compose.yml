@@ -1,0 +1,21 @@
+name: escipion
+services:
+  escipion-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: escipion-bot
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 3080:3080
+    init: true
+    stdin_open: true
+    tty: true
+    volumes:
+      - escipion-bot:/usr/src/escipion/data
+volumes:
+  escipion-bot:
+  external: true
+  name: escipion-bot
