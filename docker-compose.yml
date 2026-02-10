@@ -15,7 +15,3 @@ services:
     tty: true
     volumes:
       - escipion-bot:/usr/src/escipion/data
-volumes:
-  escipion-bot:
-  external: true
-  name: escipion-bot
